@@ -1,0 +1,89 @@
+// Stili del plugin Consenso Bridge: solo classi BEM del plugin. Dimensioni dei testi solo con variabili.
+// Le variabili --xb-* sono di Histeon, quelle --* di ACSS (Etch): la catena di var() le prende da qualunque dei due.
+
+.consenso-blocco {
+	box-sizing: border-box;
+	margin-block-start: var(--xb-space-s, var(--space-s, 0.75em));
+	padding: var(--xb-space-m, var(--space-m, 1em));
+	border: 1px solid var(--xb-border-color, var(--border-color-dark, currentColor));
+	border-radius: var(--xb-card-radius, var(--radius, 0));
+	background-color: var(--xb-surface, var(--body-bg-color, Canvas));
+	color: var(--xb-text, var(--text-color, CanvasText));
+	font-size: var(--xb-text-m, var(--text-m));
+
+	&__testo {
+		margin: 0 0 var(--xb-space-s, var(--space-s, 0.75em));
+		font-size: var(--xb-text-m, var(--text-m));
+	}
+
+	&__azioni {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--xb-space-s, var(--space-s, 0.75em));
+	}
+
+	&__pulsante {
+		font: inherit;
+		font-size: var(--xb-text-m, var(--text-m));
+		min-block-size: 2.75rem;
+		padding-inline: var(--xb-space-m, var(--space-m, 1em));
+		border: 1px solid var(--xb-primary, var(--primary, LinkText));
+		border-radius: var(--xb-btn-radius, var(--btn-radius, 0));
+		background-color: transparent;
+		color: var(--xb-primary, var(--primary, LinkText));
+		cursor: pointer;
+
+		&--accetta {
+			background-color: var(--xb-primary, var(--primary, LinkText));
+			color: var(--xb-on-primary, var(--white, Canvas));
+		}
+
+		&--preferenze {
+			background-color: transparent;
+			color: var(--xb-primary, var(--primary, LinkText));
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--xb-primary, var(--primary, LinkText));
+			outline-offset: 2px;
+		}
+	}
+}
+
+// Il documento è una colonna di lettura: la pagina che lo contiene di solito ha solo lo shortcode.
+.consenso-documento {
+	// niente colori propri: il documento eredita quelli del sito
+	box-sizing: border-box;
+	margin-inline: auto;
+	max-inline-size: var(--xb-width-prose, 70ch);
+	padding-block: var(--xb-space-xl, var(--section-space-m, 3em));
+	padding-inline: var(--xb-gutter, var(--gutter, 1em));
+
+	&__titolo {
+		margin-block: var(--xb-space-l, var(--space-l, 1.5em)) var(--xb-space-s, var(--space-s, 0.5em));
+	}
+
+	&__sezione:first-child &__titolo {
+		margin-block-start: 0;
+	}
+
+	&__testo {
+		margin-block: 0 var(--xb-space-s, var(--space-s, 0.5em));
+	}
+
+	// ACSS dà a ogni <section> di primo livello la spaziatura di una sezione di pagina: qui è una parte del testo.
+	&__sezione {
+		display: block;
+		margin-block-end: var(--xb-space-m, var(--space-m, 1em));
+		padding: 0;
+	}
+
+	&__elenco {
+		padding-inline-start: 1.25em;
+	}
+
+	&__link {
+		color: var(--xb-primary, var(--primary, LinkText));
+		text-decoration: underline;
+	}
+}

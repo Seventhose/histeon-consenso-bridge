@@ -1,0 +1,72 @@
+/* Generato da scripts/css.mjs da assets/scss/consenso-bridge.scss: non modificare a mano. */
+.consenso-blocco {
+  box-sizing: border-box;
+  margin-block-start: var(--xb-space-s, var(--space-s, 0.75em));
+  padding: var(--xb-space-m, var(--space-m, 1em));
+  border: 1px solid var(--xb-border-color, var(--border-color-dark, currentColor));
+  border-radius: var(--xb-card-radius, var(--radius, 0));
+  background-color: var(--xb-surface, var(--body-bg-color, Canvas));
+  color: var(--xb-text, var(--text-color, CanvasText));
+  font-size: var(--xb-text-m, var(--text-m));
+}
+.consenso-blocco__testo {
+  margin: 0 0 var(--xb-space-s, var(--space-s, 0.75em));
+  font-size: var(--xb-text-m, var(--text-m));
+}
+.consenso-blocco__azioni {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--xb-space-s, var(--space-s, 0.75em));
+}
+.consenso-blocco__pulsante {
+  font: inherit;
+  font-size: var(--xb-text-m, var(--text-m));
+  min-block-size: 2.75rem;
+  padding-inline: var(--xb-space-m, var(--space-m, 1em));
+  border: 1px solid var(--xb-primary, var(--primary, LinkText));
+  border-radius: var(--xb-btn-radius, var(--btn-radius, 0));
+  background-color: transparent;
+  color: var(--xb-primary, var(--primary, LinkText));
+  cursor: pointer;
+}
+.consenso-blocco__pulsante--accetta {
+  background-color: var(--xb-primary, var(--primary, LinkText));
+  color: var(--xb-on-primary, var(--white, Canvas));
+}
+.consenso-blocco__pulsante--preferenze {
+  background-color: transparent;
+  color: var(--xb-primary, var(--primary, LinkText));
+}
+.consenso-blocco__pulsante:focus-visible {
+  outline: 2px solid var(--xb-primary, var(--primary, LinkText));
+  outline-offset: 2px;
+}
+
+.consenso-documento {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-inline-size: var(--xb-width-prose, 70ch);
+  padding-block: var(--xb-space-xl, var(--section-space-m, 3em));
+  padding-inline: var(--xb-gutter, var(--gutter, 1em));
+}
+.consenso-documento__titolo {
+  margin-block: var(--xb-space-l, var(--space-l, 1.5em)) var(--xb-space-s, var(--space-s, 0.5em));
+}
+.consenso-documento__sezione:first-child .consenso-documento__titolo {
+  margin-block-start: 0;
+}
+.consenso-documento__testo {
+  margin-block: 0 var(--xb-space-s, var(--space-s, 0.5em));
+}
+.consenso-documento__sezione {
+  display: block;
+  margin-block-end: var(--xb-space-m, var(--space-m, 1em));
+  padding: 0;
+}
+.consenso-documento__elenco {
+  padding-inline-start: 1.25em;
+}
+.consenso-documento__link {
+  color: var(--xb-primary, var(--primary, LinkText));
+  text-decoration: underline;
+}

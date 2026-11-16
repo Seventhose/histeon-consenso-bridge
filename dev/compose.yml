@@ -1,0 +1,67 @@
+# WordPress di prova di Consenso Bridge: Complianz 7.5.7 (una copia indicata con CB_COMPLIANZ, mai nel repo),
+# Lingua Bridge (CB_LINGUA_BRIDGE) e il plugin di questo checkout. Senza le variabili valgono le cartelle accanto a
+# questo repo. Solo immagini locali, solo 127.0.0.1.
+# Le password le scrive dev/up.sh in dev/.env (ignorato da git): niente qui è un sito vero.
+name: kit-consenso
+
+x-wp-env: &wp-env
+  WORDPRESS_DB_HOST: db
+  WORDPRESS_DB_NAME: wordpress
+  WORDPRESS_DB_USER: wordpress
+  WORDPRESS_DB_PASSWORD: ${CB_DB_PASSWORD:?lancia dev/up.sh}
+  WORDPRESS_DEBUG: "1"
+
+x-wp-volumes: &wp-volumes
+  - wp:/var/www/html
+  - ../plugin:/var/www/html/wp-content/plugins/consenso-bridge:ro
+  - ${CB_COMPLIANZ:-../../lingua-bridge/dev/.third-party/complianz-gdpr}:/var/www/html/wp-content/plugins/complianz-gdpr:ro
+  - ${CB_LINGUA_BRIDGE:-../../lingua-bridge}:/var/www/html/wp-content/plugins/lingua-bridge:ro
+  - ../tests/wp:/cb-tests:ro
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: ${CB_DB_PASSWORD:?lancia dev/up.sh}
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      retries: 30
+
+  wordpress:
+    image: wordpress:php8.4-apache
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${CB_PORT:-8960}:80"
+    environment: *wp-env
+    volumes: *wp-volumes
+
+  cli:
+    image: wordpress:cli-php8.4
+    profiles: ["cli"]
+    user: "33:33"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *wp-env
+      HOME: /tmp
+    volumes: *wp-volumes
+    working_dir: /var/www/html
+
+volumes:
+  wp:
+  db:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.254.216.0/24

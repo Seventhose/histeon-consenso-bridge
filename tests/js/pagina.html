@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prova del blocco</title>
+<link rel="stylesheet" href="../../plugin/assets/css/consenso-bridge.css">
+<style>
+  :root { --text-m: 1rem; --text-s: 0.9375rem; --primary: #0b4f8a; --white: #fff; --body-bg-color: #fff; --text-color: #222; --border-color-dark: #555; --space-s: 0.75rem; --space-m: 1rem; --radius: 4px; --btn-radius: 4px; }
+  body { font-family: sans-serif; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Prova del blocco</h1>
+  <!-- Come i facade di Histeon: un riquadro con un link; il clic lancia xb:incorpora e, se nessuno lo annulla, carica. -->
+  <div class="xb-video" data-xb-video="https://www.youtube-nocookie.com/embed/aaaaaaaaaaa">
+    <a id="video" href="https://www.youtube.com/watch?v=aaaaaaaaaaa" aria-label="Guarda il video">Guarda il video</a>
+  </div>
+  <div class="xb-map" data-xb-map="https://www.openstreetmap.org/export/embed.html?bbox=1">
+    <a id="mappa" href="https://www.openstreetmap.org/">Apri la mappa</a>
+  </div>
+  <button class="cmplz-manage-consent" type="button">Gestisci il consenso</button>
+</main>
+<script>
+  // Il finto Complianz: lo stato lo decide il test con window.provaConsenso.
+  window.provaConsenso = false;
+  window.provaChiamate = [];
+  window.provaPreferenze = 0;
+  document.querySelector('.cmplz-manage-consent').addEventListener('click', () => { window.provaPreferenze++; });
+  window.provaInstallaComplianz = function () {
+    window.cmplz_has_consent = (categoria) => categoria === 'marketing' && window.provaConsenso;
+    window.cmplz_set_consent = (categoria, valore) => {
+      window.provaChiamate.push([categoria, valore]);
+      window.provaConsenso = categoria === 'marketing' && valore === 'allow';
+      document.dispatchEvent(new CustomEvent('cmplz_status_change', { detail: { category: categoria, value: valore } }));
+    };
+  };
+  // Il contratto di Histeon (behaviors.js): evento annullabile sul link, poi carica() se non annullato.
+  window.provaCaricati = 0;
+  for (const [id, tipo, fornitore] of [['video', 'video', 'YouTube'], ['mappa', 'mappa', 'OpenStreetMap']]) {
+    const link = document.getElementById(id);
+    const box = link.parentElement;
+    const src = box.getAttribute(tipo === 'video' ? 'data-xb-video' : 'data-xb-map');
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const carica = () => {
+        window.provaCaricati++;
+        const frame = document.createElement('iframe');
+        frame.src = 'about:blank#' + src;
+        frame.title = link.textContent;
+        frame.className = 'prova-frame';
+        link.replaceWith(frame);
+      };
+      const evento = new CustomEvent('xb:incorpora', { bubbles: true, cancelable: true, detail: { tipo, fornitore, src, carica } });
+      if (link.dispatchEvent(evento)) carica();
+    });
+  }
+  window.consensoBridge = {
+    categoria: 'marketing',
+    testi: {
+      video: 'Questo video è fornito da %s: caricandolo, il tuo browser contatta i suoi server. Per guardarlo serve il tuo consenso ai cookie di marketing.',
+      mappa: 'Questa mappa è fornita da %s: caricandola, il tuo browser contatta i suoi server. Per vederla serve il tuo consenso ai cookie di marketing.',
+      accetta: 'Accetta e mostra',
+      preferenze: 'Gestisci le preferenze'
+    }
+  };
+</script>
+<script src="../../plugin/assets/js/blocco.js"></script>
+</body>
+</html>
